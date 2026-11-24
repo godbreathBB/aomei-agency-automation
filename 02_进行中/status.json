@@ -1,0 +1,185 @@
+{
+  "team": "aomei-agency",
+  "revision": "role-spec-2026-11-24-manual-merge",
+  "merge_note": "以现有配置为准，吸收《奥美式AI团队_完整提示词手册》v1.0 新增项：交接契约 C1-C4、任务卡模板、闸门封闭式选项、冲突解决与紧急通道、T4 拆 a/b/c、T7 归档、六类失效模式、各角色细则。手册自身的成员数/命名/闸门数量疑点未引入。",
+  "handoff_contracts": {
+    "C1": {"from": "T1_寻源卡", "to": "strategist", "fields": ["客户基本信息", "市场环境", "品牌现状", "机会与挑战", "来源清单（含置信度）"]},
+    "C2": {"from": "T2_Brief", "to": ["creative", "pr"], "fields": ["背景", "目标受众", "核心洞察", "单一主张", "支持理由 RTB", "调性", "必须包含与必须避免"]},
+    "C3": {"from": "T3_创意方向", "to": ["exec", "pr", "compliance"], "fields": ["≥3 差异化方向", "Big Idea", "视觉风格", "关键文案", "延展触点", "策略依据"]},
+    "C4": {"from": "T5_质检报告", "to": ["exec", "team-lead"], "fields": ["逐项结果表六列", "总体结论"]}
+  },
+
+  "workspace_root": "/Users/zkj/WorkBuddy/2026-11-23-17-23-03",
+  "source_of_truth": "AGENCY.md",
+  "naming_rule": "T序号_阶段名_日期.md（例 T1_寻源卡_20261124.md）",
+  "legacy_aliases": [
+    "01_寻源卡.md",
+    "02_Brief.md",
+    "03_创意方向.md",
+    "04_公关方案.md",
+    "05_排期表.md",
+    "07_质检报告.md",
+    "08_交付包/"
+  ],
+  "lead_write_scope": "02_进行中/status.json（初始化配置除外）",
+  "library_ready": true,
+  "roles": {
+    "scout": {
+      "status": "已加入，待命",
+      "write_scope": ["02_进行中/01_寻源卡.md", "01_客户档案/", "02_进行中/01_供应商短名单.md"],
+      "web_search": true,
+      "external_send": false,
+      "hard_rules": ["只给事实与选项，不下策略结论", "未经 Lead 授权不联系用户或外部实体", "矛盾信息并列呈现", "每条信息标注来源与置信度"]
+    },
+    "exec": {
+      "status": "已加入，待命",
+      "write_scope": ["02_进行中/05_排期表.md", "02_进行中/08_交付包/"],
+      "skills": ["delivery-packager", "brand-guard"],
+      "external_send": "唯一授权，仅 T5 通过且 G6 放行后",
+      "hard_rules": ["不自行创作任何创意内容", "不跳过 T5 直接交付", "资源请求一律经 Lead", "排期表含 20% 缓冲时间"]
+    },
+    "pr": {
+      "status": "已加入，待命",
+      "write_scope": ["02_进行中/04_公关方案.md", "06_物料/pr/"],
+      "web_search": true,
+      "external_send": false,
+      "start_condition": "T2 完成后启动，与 T3 并行；T3 确认后微调",
+      "hard_rules": [
+        "不干预创意方向选择",
+        "未经 Lead 批准不对外发送",
+        "公关文案经合规质检后由 exec 统一发送",
+        "危机预案三级响应：观察/预警/激活",
+        "媒体名单区分必邀/意向/备选"
+      ]
+    },
+    "compliance": {
+      "status": "已加入，待命（T5 唤醒）",
+      "write_scope": ["02_进行中/07_质检报告.md", "00_品牌资产/do_not_use_list.md"],
+      "web_search": true,
+      "external_send": false,
+      "veto_power": true,
+      "hard_rules": [
+        "不参与创意或策略讨论",
+        "不自行修改物料，只在报告中指出",
+        "逐项审查表六列：文件路径/问题类型/问题描述/严重程度/建议修改/状态",
+        "高严重度必须修改，中低严重度需 Lead 确认",
+        "多地区法律分别标注"
+      ]
+    }
+  },
+  "scheduled_tasks": {
+    "authorization_required": false,
+    "status": "已创建 3 个，ACTIVE",
+    "created": [
+      {"id": "65d0224a-5f35-4d80-844d-827a5d8f60b9", "name": "每周交付复盘", "rrule": "FREQ=WEEKLY;BYDAY=MO;BYHOUR=9;BYMINUTE=0", "owner": "team-lead", "output": "04_复盘/周报_YYYYMMDD.md"},
+      {"id": "af2fa8e9-5825-41ff-a582-d2673c3fbce8", "name": "每月资料库更新", "rrule": "FREQ=MONTHLY;BYMONTHDAY=1;BYHOUR=10;BYMINUTE=0", "owner": "scout", "output": "04_复盘/月度更新_YYYYMM.md"},
+      {"id": "0625a54f-4b95-4a9b-a57b-3c11b3585120", "name": "每日舆情晨报", "rrule": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=8;BYMINUTE=30", "owner": "pr", "output": "04_复盘/舆情日报_YYYYMMDD.md"}
+    ]
+  },
+  "tasks": [
+    {
+      "id": "T1",
+      "name": "寻源",
+      "owner": "scout",
+      "status": "pending",
+      "output": "02_进行中/T1_寻源卡_YYYYMMDD.md（兼容 01_寻源卡.md）",
+      "deadline_relative": "派发后 1 个工作日内；补充信息 1 轮内完成",
+      "quality_standard": "AGENCY.md 第 9 节：五节结构、来源+置信度、近 6 个月数据、关键数据双源或标单源",
+      "gate": null
+    },
+    {
+      "id": "T2",
+      "name": "策略",
+      "owner": "strategist",
+      "status": "pending",
+      "output": "02_进行中/T2_Brief_YYYYMMDD.md（兼容 02_Brief.md）",
+      "deadline_relative": "收到寻源卡后 1 个工作日内",
+      "quality_standard": "AGENCY.md 第 6 节：七章节 Brief，主张单一可测试，洞察有据可查",
+      "gate": "T2→T3（G2）：展示 Brief，问用户策略方向是否认可"
+    },
+    {
+      "id": "T3",
+      "name": "创意",
+      "owner": "creative",
+      "status": "pending",
+      "output": "02_进行中/T3_创意方向_YYYYMMDD.md（兼容 03_创意方向.md）",
+      "deadline_relative": "G2 放行后 2 个工作日内",
+      "quality_standard": "AGENCY.md 第 7 节：3 个差异显著方向；红队报告由 Lead 决定调用（重要比稿强制）",
+      "gate": "T3→T4（G3）：展示创意方向，问用户选择哪个方向"
+    },
+    {
+      "id": "T4a",
+      "name": "公关方案",
+      "owner": "pr",
+      "status": "pending",
+      "depends_on": ["T2", "T3"],
+      "output": ["02_进行中/T4_公关方案_YYYYMMDD.md（兼容 04_公关方案.md）", "06_物料/pr/"],
+      "deadline_relative": "G3 放行后 2 个工作日内；T3 确认后 24h 内微调对齐",
+      "quality_standard": "AGENCY.md 第 10 节：公关方案七节 + 信息屋 1+3 + 媒体名单三级 + 危机三级含触发阈值",
+      "gate": null
+    },
+    {
+      "id": "T4b",
+      "name": "执行排期",
+      "owner": "exec",
+      "status": "pending",
+      "depends_on": ["T3"],
+      "output": "02_进行中/05_排期表.md",
+      "deadline_relative": "G3 放行后 2 个工作日内",
+      "quality_standard": "AGENCY.md 第 8 节：排期表七列 + ≥20% 缓冲 + 验收人 + 风险提示",
+      "gate": null
+    },
+    {
+      "id": "T4c",
+      "name": "物料制作",
+      "owner": "creative",
+      "status": "pending",
+      "depends_on": ["T3", "T4b"],
+      "output": "06_物料/",
+      "deadline_relative": "T4b 排期确认后按排期执行",
+      "quality_standard": "AGENCY.md 第 7/13 节：终稿存入 06_物料/；符合品牌 VI，印刷 300dpi / 屏幕 72dpi",
+      "gate": null
+    },
+    {
+      "id": "T5",
+      "name": "质检",
+      "owner": "compliance, exec",
+      "status": "pending",
+      "depends_on": ["T4a", "T4b", "T4c"],
+      "output": "02_进行中/T5_质检报告_YYYYMMDD.md（兼容 07_质检报告.md）",
+      "deadline_relative": "T4a/b/c 全部完成后 1 个工作日内",
+      "quality_standard": "AGENCY.md 第 11/13 节：逐项审查六列表 + 高严重度清零 + VI/分辨率合规；不通过回退责任人，只复检改动项",
+      "gate": "T5→T6（G5）：展示质检报告，封闭式选项问用户是否同意交付"
+    },
+    {
+      "id": "T6",
+      "name": "交付",
+      "owner": "exec",
+      "status": "pending",
+      "output": [
+        "02_进行中/08_交付包/",
+        "03_交付归档/<项目>-终稿-vN/"
+      ],
+      "deadline_relative": "G5 放行后 1 个工作日内",
+      "quality_standard": "AGENCY.md 第 12 节：delivery-packager 七目录 + 00_README.md；不覆盖已有交付包，先归档再打包；G6 放行后 exec 方可外部发送",
+      "gate": "G6：对外发送前由用户确认"
+    },
+    {
+      "id": "T7",
+      "name": "归档",
+      "owner": "exec",
+      "status": "pending",
+      "depends_on": ["T6"],
+      "output": "03_交付归档/<项目名>/",
+      "deadline_relative": "G6 放行后 1 个工作日内",
+      "quality_standard": "AGENCY.md 第 5 节：02_进行中/ 该项目全部文件移入归档目录，并更新 01_客户档案/",
+      "gate": null
+    }
+  ],
+  "legacy_artifacts": [
+    "02进行中/DEMO-原始需求.md",
+    "02进行中/DEMO-Brief-v1.md",
+    "02进行中/DEMO-创意方向-v1.md"
+  ],
+  "note": "历史 DEMO 产物不迁移、不改写；新一轮任务按本 status.json 命名规则执行。"
+}

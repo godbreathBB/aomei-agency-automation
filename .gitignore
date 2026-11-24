@@ -1,0 +1,12 @@
+# 工作记忆与历史 Demo（不入库）
+.workbuddy/memory/
+02进行中/
+
+# 临时与系统文件
+*.log
+.DS_Store
+
+# 敏感信息
+.env
+*.key
+*.pem
